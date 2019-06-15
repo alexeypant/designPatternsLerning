@@ -12,6 +12,14 @@ import {ChocolateBoiler, IChocolateBoiler} from "../source/singleton/ChocolateBo
 import {SimpleRemoteControl} from "../source/command/remoteControls/SimpleRemoteControl";
 import {ILights, Lights} from "../source/command/devices/Lights";
 import {LightOnCommand} from "../source/command/commands/LightOnCommand";
+import {GarageDoor, IGarageDoor} from "../source/command/devices/GarageDoor";
+import {GarageDoorOpenCommand} from "../source/command/commands/GarageDoorOpenCommand";
+import {RemoteControl} from "../source/command/remoteControls/RemoteControl";
+import {IStereo, Stereo} from "../source/command/devices/Stereo";
+import {ICommand} from "../source/command/commands/ICommand";
+import {LightOffCommand} from "../source/command/commands/LightOffCommand";
+import {StereoOnCommand} from "../source/command/commands/StereoOnCommand";
+import {StereoOffCommand} from "../source/command/commands/StereoOffCommand";
 
 describe('duckSim', () => {
     it('rubber duck', () => {
@@ -87,5 +95,47 @@ describe('Simple remote control test', () => {
         simpleRemote.buttonWasPressed();
         assert.ok(true);
 
+    });
+
+    it('controlling garage door', () => {
+        const simpleRemote = new SimpleRemoteControl();
+        const garageDoor: IGarageDoor = new GarageDoor();
+        const garageDoorOpenCommand = new GarageDoorOpenCommand(garageDoor);
+        simpleRemote.setCommand(garageDoorOpenCommand);
+        simpleRemote.buttonWasPressed();
+        assert.ok(true);
+
     })
 });
+
+
+describe('Remote control', () => {
+    it('controlling devices', () => {
+        const remoteControl = new RemoteControl();
+        const livingRoomLights: ILights = new Lights();
+        const kitchenLights: ILights = new Lights();
+        const stereo: IStereo = new Stereo();
+
+        const livingRoomLightOnCommand: ICommand = new LightOnCommand(livingRoomLights);
+        const livingRoomLightOffCommand: ICommand = new LightOffCommand(livingRoomLights);
+        const kitchenLightOnCommand: ICommand = new LightOnCommand(kitchenLights);
+        const kitchenLightOffCommand: ICommand = new LightOffCommand(kitchenLights);
+        const stereoOnCommand: ICommand = new StereoOnCommand(stereo);
+        const stereoOffCommand: ICommand = new StereoOffCommand(stereo);
+
+        remoteControl.setCommand(0, livingRoomLightOnCommand, livingRoomLightOffCommand);
+        remoteControl.setCommand(1, kitchenLightOnCommand, kitchenLightOffCommand);
+        remoteControl.setCommand(2, stereoOnCommand, stereoOffCommand);
+
+        remoteControl.onButtonWasPushed(0);
+        remoteControl.offButtonWasPushed(0);
+        remoteControl.onButtonWasPushed(1);
+        remoteControl.offButtonWasPushed(1);
+        remoteControl.onButtonWasPushed(2);
+        remoteControl.offButtonWasPushed(2);
+        assert.ok(true);
+
+    });
+});
+
+
