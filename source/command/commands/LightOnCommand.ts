@@ -11,4 +11,8 @@ export class LightOnCommand implements ICommand {
     public execute():void {
         this.lights.on();
     }
+
+    public undo(): void {
+        this.lights.off();
+    }
 }

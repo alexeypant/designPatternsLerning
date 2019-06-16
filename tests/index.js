@@ -121,5 +121,29 @@
             assert.ok(true);
         });
     });
+    describe('Remote control with undo button', function () {
+        it('controlling devices with undo', function () {
+            var remoteControl = new RemoteControl_1.RemoteControl();
+            var livingRoomLights = new Lights_1.Lights();
+            var kitchenLights = new Lights_1.Lights();
+            var stereo = new Stereo_1.Stereo();
+            var livingRoomLightOnCommand = new LightOnCommand_1.LightOnCommand(livingRoomLights);
+            var livingRoomLightOffCommand = new LightOffCommand_1.LightOffCommand(livingRoomLights);
+            var kitchenLightOnCommand = new LightOnCommand_1.LightOnCommand(kitchenLights);
+            var kitchenLightOffCommand = new LightOffCommand_1.LightOffCommand(kitchenLights);
+            var stereoOnCommand = new StereoOnCommand_1.StereoOnCommand(stereo);
+            var stereoOffCommand = new StereoOffCommand_1.StereoOffCommand(stereo);
+            remoteControl.setCommand(0, livingRoomLightOnCommand, livingRoomLightOffCommand);
+            remoteControl.setCommand(1, kitchenLightOnCommand, kitchenLightOffCommand);
+            remoteControl.setCommand(2, stereoOnCommand, stereoOffCommand);
+            remoteControl.onButtonWasPushed(0);
+            remoteControl.undoButtonWasPushed();
+            remoteControl.onButtonWasPushed(1);
+            remoteControl.undoButtonWasPushed();
+            remoteControl.onButtonWasPushed(2);
+            remoteControl.undoButtonWasPushed();
+            assert.ok(true);
+        });
+    });
 });
 //# sourceMappingURL=index.js.map

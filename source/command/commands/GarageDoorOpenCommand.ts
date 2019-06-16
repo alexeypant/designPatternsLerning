@@ -12,4 +12,8 @@ export class GarageDoorOpenCommand implements ICommand {
     public execute():void {
         this.garageDoor.up();
     }
+
+    public undo():void{
+        this.garageDoor.down();
+    }
 }

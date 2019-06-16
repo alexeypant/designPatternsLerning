@@ -75,7 +75,7 @@ describe('Chocolate Boiler', () => {
         chocolateBoiler.fill();
         chocolateBoiler.boil();
         chocolateBoiler.drain();
-        console.log('trying to make one more instance of ChocoBoiler')
+        console.log('trying to make one more instance of ChocoBoiler');
         const boilerTwo: IChocolateBoiler = ChocolateBoiler.getInstance();
         boilerTwo.boil();
         boilerTwo.drain();
@@ -138,4 +138,31 @@ describe('Remote control', () => {
     });
 });
 
+describe('Remote control with undo button', () => {
+    it('controlling devices with undo', () => {
+        const remoteControl = new RemoteControl();
+        const livingRoomLights: ILights = new Lights();
+        const kitchenLights: ILights = new Lights();
+        const stereo: IStereo = new Stereo();
 
+        const livingRoomLightOnCommand: ICommand = new LightOnCommand(livingRoomLights);
+        const livingRoomLightOffCommand: ICommand = new LightOffCommand(livingRoomLights);
+        const kitchenLightOnCommand: ICommand = new LightOnCommand(kitchenLights);
+        const kitchenLightOffCommand: ICommand = new LightOffCommand(kitchenLights);
+        const stereoOnCommand: ICommand = new StereoOnCommand(stereo);
+        const stereoOffCommand: ICommand = new StereoOffCommand(stereo);
+
+        remoteControl.setCommand(0, livingRoomLightOnCommand, livingRoomLightOffCommand);
+        remoteControl.setCommand(1, kitchenLightOnCommand, kitchenLightOffCommand);
+        remoteControl.setCommand(2, stereoOnCommand, stereoOffCommand);
+
+        remoteControl.onButtonWasPushed(0);
+        remoteControl.undoButtonWasPushed();
+        remoteControl.onButtonWasPushed(1);
+        remoteControl.undoButtonWasPushed();
+        remoteControl.onButtonWasPushed(2);
+        remoteControl.undoButtonWasPushed();
+        assert.ok(true);
+
+    });
+});

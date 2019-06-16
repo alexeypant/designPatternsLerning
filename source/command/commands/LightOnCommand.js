@@ -16,6 +16,9 @@
         LightOnCommand.prototype.execute = function () {
             this.lights.on();
         };
+        LightOnCommand.prototype.undo = function () {
+            this.lights.off();
+        };
         return LightOnCommand;
     }());
     exports.LightOnCommand = LightOnCommand;

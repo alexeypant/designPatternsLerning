@@ -4,12 +4,14 @@ export interface IRemoteControl {
     setCommand: (slot: number, onCommand: ICommand, offCommand: ICommand) => void;
     onButtonWasPushed: (slot: number) => void;
     offButtonWasPushed: (slot: number) => void;
+    undoButtonWasPushed: () => void;
     toString: () => string;
 }
 
 export class RemoteControl implements IRemoteControl {
     onCommands: ICommand[] = [];
     offCommands: ICommand[] = [];
+    undoButton: ICommand;
 
     constructor(){
     }
@@ -21,10 +23,16 @@ export class RemoteControl implements IRemoteControl {
 
     onButtonWasPushed(slot: number): void {
         this.onCommands[slot].execute();
+        this.undoButton = this.onCommands[slot];
     }
 
     offButtonWasPushed(slot: number): void {
         this.offCommands[slot].execute();
+        this.undoButton = this.offCommands[slot];
+    }
+
+    undoButtonWasPushed():void {
+        this.undoButton.undo();
     }
 
     toString(): string {

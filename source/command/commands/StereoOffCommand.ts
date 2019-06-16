@@ -11,4 +11,10 @@ export class StereoOffCommand implements ICommand {
     public execute():void {
         this.stereo.off();
     }
+
+    public undo():void{
+        this.stereo.on();
+        this.stereo.setCD();
+        this.stereo.setVolume();
+    }
 }
