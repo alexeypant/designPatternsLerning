@@ -20,6 +20,22 @@ import {ICommand} from "../source/command/commands/ICommand";
 import {LightOffCommand} from "../source/command/commands/LightOffCommand";
 import {StereoOnCommand} from "../source/command/commands/StereoOnCommand";
 import {StereoOffCommand} from "../source/command/commands/StereoOffCommand";
+import {Amplifier, IAmplifier} from "../source/homeTheater/devices/Amplifier";
+import {IPopcornPopper, PopcornPopper} from "../source/homeTheater/devices/PopcornPopper";
+import {ITuner, Tuner} from "../source/homeTheater/devices/Tuner";
+import {IProjector, Projector} from "../source/homeTheater/devices/Projector";
+import {DvdPlayer, IDvdPlayer} from "../source/homeTheater/devices/DvdPlayer";
+import {CdPlayer, ICdPlayer} from "../source/homeTheater/devices/CdPlayer";
+import {IScreen, Screen} from "../source/homeTheater/devices/Screen";
+import {HomeTheaterFacade, IHomeTheaterFacade} from "../source/homeTheater/HomeTheaterFacade";
+import {ITheaterLights, TheaterLights} from "../source/homeTheater/devices/TheaterLights";
+import {ICaffeineBeverage} from "../source/starbuzz/CaffeineBeverage";
+import {Tea} from "../source/starbuzz/beverages/Tea";
+import {Coffee} from "../source/starbuzz/beverages/Coffee";
+import {CoffeeWithHook} from "../source/starbuzz/beverages/CoffeeWithHook";
+import {IPancakeHouseMenu, PancakeHouseMenu} from "../source/menu/menus/PancakeHouseMenu";
+import {DinerMenu, IDinerMenu} from "../source/menu/menus/DinerMenu";
+import {IWaitress, Waitress} from "../source/menu/Waitress";
 
 describe('duckSim', () => {
     it('rubber duck', () => {
@@ -165,4 +181,82 @@ describe('Remote control with undo button', () => {
         assert.ok(true);
 
     });
+});
+
+
+describe('Home theater system implementing facade', () => {
+    const popper: IPopcornPopper = new PopcornPopper();
+    const lights: ITheaterLights = new TheaterLights();
+    const screen: IScreen = new Screen();
+    const tuner: ITuner = new Tuner();
+    const dvdPlayer: IDvdPlayer = new DvdPlayer();
+    const cdPlayer: ICdPlayer = new CdPlayer();
+    const amplifier: IAmplifier = new Amplifier(tuner, dvdPlayer, cdPlayer);
+    const projector: IProjector = new Projector(dvdPlayer);
+
+    const homeTheater: IHomeTheaterFacade = new HomeTheaterFacade(
+        amplifier,
+        tuner,
+        dvdPlayer,
+        cdPlayer,
+        projector,
+        lights,
+        screen,
+        popper,
+    );
+
+    it('turning home theater on', () => {
+        homeTheater.watchMovie();
+        assert.ok(true);
+    });
+
+    it('turning home theater off', () => {
+        homeTheater.endMovie();
+        assert.ok(true);
+    });
+});
+
+describe('making tea and coffee', () => {
+    const tea: ICaffeineBeverage = new Tea();
+
+    it('making tea', () => {
+        const tea: ICaffeineBeverage = new Tea();
+        tea.prepareRecipe();
+    });
+
+    it('making coffee', () => {
+        const coffee: ICaffeineBeverage = new Coffee();
+        coffee.prepareRecipe();
+    });
+
+    it('making coffee with hook', () => {
+        const coffee: ICaffeineBeverage = new CoffeeWithHook(false);
+        coffee.prepareRecipe();
+    });
+});
+
+describe('iterating through menu items', () => {
+
+    it('should print menu all items', () => {
+        const pancakeMenu: IPancakeHouseMenu = new PancakeHouseMenu();
+        const dinerMenu: IDinerMenu = new DinerMenu();
+        const waitress: IWaitress = new Waitress(pancakeMenu, dinerMenu);
+        waitress.printMenu();
+    });
+
+    it('should print vegetarian items', () => {
+        const pancakeMenu: IPancakeHouseMenu = new PancakeHouseMenu();
+        const dinerMenu: IDinerMenu = new DinerMenu();
+        const waitress: IWaitress = new Waitress(pancakeMenu, dinerMenu);
+        waitress.printVegetarianMenu();
+    });
+
+    it('should print true if the item is vegetarian', () => {
+        const pancakeMenu: IPancakeHouseMenu = new PancakeHouseMenu();
+        const dinerMenu: IDinerMenu = new DinerMenu();
+        const waitress: IWaitress = new Waitress(pancakeMenu, dinerMenu);
+        const result = waitress.isItemVegetarian('bliny');
+        console.log(result);
+    });
+
 });

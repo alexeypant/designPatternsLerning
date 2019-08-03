@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "mocha", "assert", "../dist/RubberDuck", "../dist/weatherStation/WeatherData", "../dist/weatherStation/CurrentConditionsDisplay", "../dist/weatherStation/HumidityDisplay", "../dist/weatherStation/PressureDisplay", "../dist/coffeeAddsOns/Espresso", "../dist/coffeeAddsOns/Whip", "../source/singleton/ChocolateBoiler", "../source/command/remoteControls/SimpleRemoteControl", "../source/command/devices/Lights", "../source/command/commands/LightOnCommand", "../source/command/devices/GarageDoor", "../source/command/commands/GarageDoorOpenCommand", "../source/command/remoteControls/RemoteControl", "../source/command/devices/Stereo", "../source/command/commands/LightOffCommand", "../source/command/commands/StereoOnCommand", "../source/command/commands/StereoOffCommand"], factory);
+        define(["require", "exports", "mocha", "assert", "../dist/RubberDuck", "../dist/weatherStation/WeatherData", "../dist/weatherStation/CurrentConditionsDisplay", "../dist/weatherStation/HumidityDisplay", "../dist/weatherStation/PressureDisplay", "../dist/coffeeAddsOns/Espresso", "../dist/coffeeAddsOns/Whip", "../source/singleton/ChocolateBoiler", "../source/command/remoteControls/SimpleRemoteControl", "../source/command/devices/Lights", "../source/command/commands/LightOnCommand", "../source/command/devices/GarageDoor", "../source/command/commands/GarageDoorOpenCommand", "../source/command/remoteControls/RemoteControl", "../source/command/devices/Stereo", "../source/command/commands/LightOffCommand", "../source/command/commands/StereoOnCommand", "../source/command/commands/StereoOffCommand", "../source/homeTheater/devices/Amplifier", "../source/homeTheater/devices/PopcornPopper", "../source/homeTheater/devices/Tuner", "../source/homeTheater/devices/Projector", "../source/homeTheater/devices/DvdPlayer", "../source/homeTheater/devices/CdPlayer", "../source/homeTheater/devices/Screen", "../source/homeTheater/HomeTheaterFacade", "../source/homeTheater/devices/TheaterLights", "../source/starbuzz/beverages/Tea", "../source/starbuzz/beverages/Coffee", "../source/starbuzz/beverages/CoffeeWithHook", "../source/menu/menus/PancakeHouseMenu", "../source/menu/menus/DinerMenu", "../source/menu/Waitress"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -29,6 +29,21 @@
     var LightOffCommand_1 = require("../source/command/commands/LightOffCommand");
     var StereoOnCommand_1 = require("../source/command/commands/StereoOnCommand");
     var StereoOffCommand_1 = require("../source/command/commands/StereoOffCommand");
+    var Amplifier_1 = require("../source/homeTheater/devices/Amplifier");
+    var PopcornPopper_1 = require("../source/homeTheater/devices/PopcornPopper");
+    var Tuner_1 = require("../source/homeTheater/devices/Tuner");
+    var Projector_1 = require("../source/homeTheater/devices/Projector");
+    var DvdPlayer_1 = require("../source/homeTheater/devices/DvdPlayer");
+    var CdPlayer_1 = require("../source/homeTheater/devices/CdPlayer");
+    var Screen_1 = require("../source/homeTheater/devices/Screen");
+    var HomeTheaterFacade_1 = require("../source/homeTheater/HomeTheaterFacade");
+    var TheaterLights_1 = require("../source/homeTheater/devices/TheaterLights");
+    var Tea_1 = require("../source/starbuzz/beverages/Tea");
+    var Coffee_1 = require("../source/starbuzz/beverages/Coffee");
+    var CoffeeWithHook_1 = require("../source/starbuzz/beverages/CoffeeWithHook");
+    var PancakeHouseMenu_1 = require("../source/menu/menus/PancakeHouseMenu");
+    var DinerMenu_1 = require("../source/menu/menus/DinerMenu");
+    var Waitress_1 = require("../source/menu/Waitress");
     describe('duckSim', function () {
         it('rubber duck', function () {
             var rubberDuck = new RubberDuck_1.RubberDuck();
@@ -143,6 +158,61 @@
             remoteControl.onButtonWasPushed(2);
             remoteControl.undoButtonWasPushed();
             assert.ok(true);
+        });
+    });
+    describe('Home theater system implementing facade', function () {
+        var popper = new PopcornPopper_1.PopcornPopper();
+        var lights = new TheaterLights_1.TheaterLights();
+        var screen = new Screen_1.Screen();
+        var tuner = new Tuner_1.Tuner();
+        var dvdPlayer = new DvdPlayer_1.DvdPlayer();
+        var cdPlayer = new CdPlayer_1.CdPlayer();
+        var amplifier = new Amplifier_1.Amplifier(tuner, dvdPlayer, cdPlayer);
+        var projector = new Projector_1.Projector(dvdPlayer);
+        var homeTheater = new HomeTheaterFacade_1.HomeTheaterFacade(amplifier, tuner, dvdPlayer, cdPlayer, projector, lights, screen, popper);
+        it('turning home theater on', function () {
+            homeTheater.watchMovie();
+            assert.ok(true);
+        });
+        it('turning home theater off', function () {
+            homeTheater.endMovie();
+            assert.ok(true);
+        });
+    });
+    describe('making tea and coffee', function () {
+        var tea = new Tea_1.Tea();
+        it('making tea', function () {
+            var tea = new Tea_1.Tea();
+            tea.prepareRecipe();
+        });
+        it('making coffee', function () {
+            var coffee = new Coffee_1.Coffee();
+            coffee.prepareRecipe();
+        });
+        it('making coffee with hook', function () {
+            var coffee = new CoffeeWithHook_1.CoffeeWithHook(false);
+            coffee.prepareRecipe();
+        });
+    });
+    describe('iterating through menu items', function () {
+        it('should print menu all items', function () {
+            var pancakeMenu = new PancakeHouseMenu_1.PancakeHouseMenu();
+            var dinerMenu = new DinerMenu_1.DinerMenu();
+            var waitress = new Waitress_1.Waitress(pancakeMenu, dinerMenu);
+            waitress.printMenu();
+        });
+        it('should print vegetarian items', function () {
+            var pancakeMenu = new PancakeHouseMenu_1.PancakeHouseMenu();
+            var dinerMenu = new DinerMenu_1.DinerMenu();
+            var waitress = new Waitress_1.Waitress(pancakeMenu, dinerMenu);
+            waitress.printVegetarianMenu();
+        });
+        it('should print true if the item is vegetarian', function () {
+            var pancakeMenu = new PancakeHouseMenu_1.PancakeHouseMenu();
+            var dinerMenu = new DinerMenu_1.DinerMenu();
+            var waitress = new Waitress_1.Waitress(pancakeMenu, dinerMenu);
+            var result = waitress.isItemVegetarian('bliny');
+            console.log(result);
         });
     });
 });
