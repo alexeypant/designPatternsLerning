@@ -1,41 +1,44 @@
 import 'mocha';
 import * as assert from "assert";
-import {RubberDuck} from "../dist/RubberDuck";
-import {WeatherData} from "../dist/weatherStation/WeatherData";
-import {CurrentConditionsDisplay} from "../dist/weatherStation/CurrentConditionsDisplay";
-import {HumidityDisplay} from "../dist/weatherStation/HumidityDisplay";
-import {PressureDisplay} from "../dist/weatherStation/PressureDisplay";
-import {Beverage} from "../dist/coffeeAddsOns/Beverage";
-import {Espresso} from "../dist/coffeeAddsOns/Espresso";
-import {Whip} from "../dist/coffeeAddsOns/Whip";
-import {ChocolateBoiler, IChocolateBoiler} from "../source/singleton/ChocolateBoiler";
-import {SimpleRemoteControl} from "../source/command/remoteControls/SimpleRemoteControl";
-import {ILights, Lights} from "../source/command/devices/Lights";
-import {LightOnCommand} from "../source/command/commands/LightOnCommand";
-import {GarageDoor, IGarageDoor} from "../source/command/devices/GarageDoor";
-import {GarageDoorOpenCommand} from "../source/command/commands/GarageDoorOpenCommand";
-import {RemoteControl} from "../source/command/remoteControls/RemoteControl";
-import {IStereo, Stereo} from "../source/command/devices/Stereo";
-import {ICommand} from "../source/command/commands/ICommand";
-import {LightOffCommand} from "../source/command/commands/LightOffCommand";
-import {StereoOnCommand} from "../source/command/commands/StereoOnCommand";
-import {StereoOffCommand} from "../source/command/commands/StereoOffCommand";
-import {Amplifier, IAmplifier} from "../source/homeTheater/devices/Amplifier";
-import {IPopcornPopper, PopcornPopper} from "../source/homeTheater/devices/PopcornPopper";
-import {ITuner, Tuner} from "../source/homeTheater/devices/Tuner";
-import {IProjector, Projector} from "../source/homeTheater/devices/Projector";
-import {DvdPlayer, IDvdPlayer} from "../source/homeTheater/devices/DvdPlayer";
-import {CdPlayer, ICdPlayer} from "../source/homeTheater/devices/CdPlayer";
-import {IScreen, Screen} from "../source/homeTheater/devices/Screen";
-import {HomeTheaterFacade, IHomeTheaterFacade} from "../source/homeTheater/HomeTheaterFacade";
-import {ITheaterLights, TheaterLights} from "../source/homeTheater/devices/TheaterLights";
-import {ICaffeineBeverage} from "../source/starbuzz/CaffeineBeverage";
-import {Tea} from "../source/starbuzz/beverages/Tea";
-import {Coffee} from "../source/starbuzz/beverages/Coffee";
-import {CoffeeWithHook} from "../source/starbuzz/beverages/CoffeeWithHook";
-import {IPancakeHouseMenu, PancakeHouseMenu} from "../source/menu/menus/PancakeHouseMenu";
-import {DinerMenu, IDinerMenu} from "../source/menu/menus/DinerMenu";
-import {IWaitress, Waitress} from "../source/menu/Waitress";
+import { RubberDuck } from "../dist/RubberDuck";
+import { WeatherData } from "../dist/weatherStation/WeatherData";
+import { CurrentConditionsDisplay } from "../dist/weatherStation/CurrentConditionsDisplay";
+import { HumidityDisplay } from "../dist/weatherStation/HumidityDisplay";
+import { PressureDisplay } from "../dist/weatherStation/PressureDisplay";
+import { Beverage } from "../dist/coffeeAddsOns/Beverage";
+import { Espresso } from "../dist/coffeeAddsOns/Espresso";
+import { Whip } from "../dist/coffeeAddsOns/Whip";
+import { ChocolateBoiler, IChocolateBoiler } from "../source/singleton/ChocolateBoiler";
+import { SimpleRemoteControl } from "../source/command/remoteControls/SimpleRemoteControl";
+import { ILights, Lights } from "../source/command/devices/Lights";
+import { LightOnCommand } from "../source/command/commands/LightOnCommand";
+import { GarageDoor, IGarageDoor } from "../source/command/devices/GarageDoor";
+import { GarageDoorOpenCommand } from "../source/command/commands/GarageDoorOpenCommand";
+import { RemoteControl } from "../source/command/remoteControls/RemoteControl";
+import { IStereo, Stereo } from "../source/command/devices/Stereo";
+import { ICommand } from "../source/command/commands/ICommand";
+import { LightOffCommand } from "../source/command/commands/LightOffCommand";
+import { StereoOnCommand } from "../source/command/commands/StereoOnCommand";
+import { StereoOffCommand } from "../source/command/commands/StereoOffCommand";
+import { Amplifier, IAmplifier } from "../source/homeTheater/devices/Amplifier";
+import { IPopcornPopper, PopcornPopper } from "../source/homeTheater/devices/PopcornPopper";
+import { ITuner, Tuner } from "../source/homeTheater/devices/Tuner";
+import { IProjector, Projector } from "../source/homeTheater/devices/Projector";
+import { DvdPlayer, IDvdPlayer } from "../source/homeTheater/devices/DvdPlayer";
+import { CdPlayer, ICdPlayer } from "../source/homeTheater/devices/CdPlayer";
+import { IScreen, Screen } from "../source/homeTheater/devices/Screen";
+import { HomeTheaterFacade, IHomeTheaterFacade } from "../source/homeTheater/HomeTheaterFacade";
+import { ITheaterLights, TheaterLights } from "../source/homeTheater/devices/TheaterLights";
+import { ICaffeineBeverage } from "../source/starbuzz/CaffeineBeverage";
+import { Tea } from "../source/starbuzz/beverages/Tea";
+import { Coffee } from "../source/starbuzz/beverages/Coffee";
+import { CoffeeWithHook } from "../source/starbuzz/beverages/CoffeeWithHook";
+import { IPancakeHouseMenu, PancakeHouseMenu } from "../source/menu/menus/PancakeHouseMenu";
+import { DinerMenu, IDinerMenu } from "../source/menu/menus/DinerMenu";
+import { IWaitress, Waitress } from "../source/menu/Waitress";
+import { Person } from '../source/visitor/Person';
+import { EHealth } from '../source/visitor/EHealth';
+import { Doctor } from '../source/visitor/Doctor';
 
 describe('duckSim', () => {
     it('rubber duck', () => {
@@ -259,4 +262,21 @@ describe('iterating through menu items', () => {
         console.log(result);
     });
 
+});
+
+describe('healing the people', () => {
+    it('should make health better', () => {
+        const people = [
+            new Person('John', EHealth.good),
+            new Person('Martin', EHealth.normal),
+            new Person('Victor', EHealth.bad),
+        ];
+        const doctor = new Doctor();
+        for (const person of people) {
+            person.acceptDoctor(doctor);
+        }
+        assert.strictEqual(people[0].getHealth(), EHealth.good);
+        assert.strictEqual(people[1].getHealth(), EHealth.good);
+        assert.strictEqual(people[2].getHealth(), EHealth.normal);
+    });
 });

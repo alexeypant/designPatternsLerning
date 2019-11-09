@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "mocha", "assert", "../dist/RubberDuck", "../dist/weatherStation/WeatherData", "../dist/weatherStation/CurrentConditionsDisplay", "../dist/weatherStation/HumidityDisplay", "../dist/weatherStation/PressureDisplay", "../dist/coffeeAddsOns/Espresso", "../dist/coffeeAddsOns/Whip", "../source/singleton/ChocolateBoiler", "../source/command/remoteControls/SimpleRemoteControl", "../source/command/devices/Lights", "../source/command/commands/LightOnCommand", "../source/command/devices/GarageDoor", "../source/command/commands/GarageDoorOpenCommand", "../source/command/remoteControls/RemoteControl", "../source/command/devices/Stereo", "../source/command/commands/LightOffCommand", "../source/command/commands/StereoOnCommand", "../source/command/commands/StereoOffCommand", "../source/homeTheater/devices/Amplifier", "../source/homeTheater/devices/PopcornPopper", "../source/homeTheater/devices/Tuner", "../source/homeTheater/devices/Projector", "../source/homeTheater/devices/DvdPlayer", "../source/homeTheater/devices/CdPlayer", "../source/homeTheater/devices/Screen", "../source/homeTheater/HomeTheaterFacade", "../source/homeTheater/devices/TheaterLights", "../source/starbuzz/beverages/Tea", "../source/starbuzz/beverages/Coffee", "../source/starbuzz/beverages/CoffeeWithHook", "../source/menu/menus/PancakeHouseMenu", "../source/menu/menus/DinerMenu", "../source/menu/Waitress"], factory);
+        define(["require", "exports", "mocha", "assert", "../dist/RubberDuck", "../dist/weatherStation/WeatherData", "../dist/weatherStation/CurrentConditionsDisplay", "../dist/weatherStation/HumidityDisplay", "../dist/weatherStation/PressureDisplay", "../dist/coffeeAddsOns/Espresso", "../dist/coffeeAddsOns/Whip", "../source/singleton/ChocolateBoiler", "../source/command/remoteControls/SimpleRemoteControl", "../source/command/devices/Lights", "../source/command/commands/LightOnCommand", "../source/command/devices/GarageDoor", "../source/command/commands/GarageDoorOpenCommand", "../source/command/remoteControls/RemoteControl", "../source/command/devices/Stereo", "../source/command/commands/LightOffCommand", "../source/command/commands/StereoOnCommand", "../source/command/commands/StereoOffCommand", "../source/homeTheater/devices/Amplifier", "../source/homeTheater/devices/PopcornPopper", "../source/homeTheater/devices/Tuner", "../source/homeTheater/devices/Projector", "../source/homeTheater/devices/DvdPlayer", "../source/homeTheater/devices/CdPlayer", "../source/homeTheater/devices/Screen", "../source/homeTheater/HomeTheaterFacade", "../source/homeTheater/devices/TheaterLights", "../source/starbuzz/beverages/Tea", "../source/starbuzz/beverages/Coffee", "../source/starbuzz/beverages/CoffeeWithHook", "../source/menu/menus/PancakeHouseMenu", "../source/menu/menus/DinerMenu", "../source/menu/Waitress", "../source/visitor/Person", "../source/visitor/EHealth", "../source/visitor/Doctor"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -44,6 +44,9 @@
     var PancakeHouseMenu_1 = require("../source/menu/menus/PancakeHouseMenu");
     var DinerMenu_1 = require("../source/menu/menus/DinerMenu");
     var Waitress_1 = require("../source/menu/Waitress");
+    var Person_1 = require("../source/visitor/Person");
+    var EHealth_1 = require("../source/visitor/EHealth");
+    var Doctor_1 = require("../source/visitor/Doctor");
     describe('duckSim', function () {
         it('rubber duck', function () {
             var rubberDuck = new RubberDuck_1.RubberDuck();
@@ -213,6 +216,23 @@
             var waitress = new Waitress_1.Waitress(pancakeMenu, dinerMenu);
             var result = waitress.isItemVegetarian('bliny');
             console.log(result);
+        });
+    });
+    describe('healing the people', function () {
+        it('should make health better', function () {
+            var people = [
+                new Person_1.Person('John', EHealth_1.EHealth.good),
+                new Person_1.Person('Martin', EHealth_1.EHealth.normal),
+                new Person_1.Person('Victor', EHealth_1.EHealth.bad),
+            ];
+            var doctor = new Doctor_1.Doctor();
+            for (var _i = 0, people_1 = people; _i < people_1.length; _i++) {
+                var person = people_1[_i];
+                person.acceptDoctor(doctor);
+            }
+            assert.strictEqual(people[0].getHealth(), EHealth_1.EHealth.good);
+            assert.strictEqual(people[1].getHealth(), EHealth_1.EHealth.good);
+            assert.strictEqual(people[2].getHealth(), EHealth_1.EHealth.normal);
         });
     });
 });
