@@ -1,5 +1,3 @@
-import { GeoProxyService } from '../geoCoder/GeoProxyService';
-import { ECities } from '../geoCoder/ECities';
 import * as assert from "assert";
 import { ICarsFactory } from './ICarsFactory';
 import { ToyotaFactory } from './ToyotaFactory';
@@ -19,6 +17,4 @@ describe('abstract factory', () => {
     assert.strictEqual(toyotaSedan.type, ECarType.sedan);
     assert.strictEqual(toyotaSedan.producer, ECarProducer.ford);
   });
-
-
 });
